@@ -2,16 +2,17 @@
  * Indextank autocomplete.
  * 
  * @param url: your Indextank PUBLIC API url. Required.
- * @param indexName: the name of the index to show automcomplete for. Required.
+ * @param indexName: the name of the index to show autocomplete for. Required.
+ * @param fieldName: the name of the field to show autocomplete for. Required.
  * @param options: a hash to override default settings. Optional.
  * 
  * @author Diego Buthay <dbuthay@gmail.com>
- * @version 0.1
+ * @version 0.2
  */
 
 (function( $ ){
 
-  $.fn.autocompleteWithIndextank = function( url, indexName, options ) {  
+  $.fn.autocompleteWithIndextank = function( url, indexName, fieldName, options ) {  
 
     var settings = {
       selectCallback: function( event, ui ) {
@@ -22,7 +23,7 @@
                         $.ajax( {
                           url: url + "/v1/indexes/" + indexName + "/autocomplete",
                           dataType: "jsonp",
-                          data: { query: request.term },
+                          data: { query: request.term, field: fieldName },
                           success: function( data ) { responseCallback( data.suggestions ); }
                         } );
                       }, // source callback

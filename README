@@ -16,9 +16,12 @@
  * on the HEAD element of the HTML document containing the input, write
  <script type="text/javascript">
     $(window).load(function(){
-        $('input#query').autocompleteWithIndextank(PUBLIC_API_URL, INDEX_NAME);
+        $('input#query').autocompleteWithIndextank(PUBLIC_API_URL, INDEX_NAME, FIELD_NAME);
     });
  </script>
+
+== Example ==
+ * see test.html. It will autocomplete using indextank.com's documentation.
 
 == TODO ==
 
