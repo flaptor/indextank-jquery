@@ -7,7 +7,7 @@
  * @param options: a hash to override default settings. Optional.
  * 
  * @author Diego Buthay <dbuthay@gmail.com>
- * @version 0.2
+ * @version 0.2.1
  */
 
 (function( $ ){
@@ -17,7 +17,8 @@
     var settings = {
       selectCallback: function( event, ui ) {
                         event.target.value = ui.item.value;
-                        event.target.form.submit();
+                        // wrap form into a jQuery object, so submit honors onsubmit.
+                        $(event.target.form).submit();
                       }, // select callback
       sourceCallback: function( request, responseCallback ) {
                         $.ajax( {
