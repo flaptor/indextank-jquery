@@ -7,7 +7,7 @@
  * @param options: a hash to override default settings. Optional.
  * 
  * @author Diego Buthay <dbuthay@gmail.com>
- * @version 0.2.1
+ * @version 0.2.2
  */
 
 (function( $ ){
@@ -41,6 +41,12 @@
         $.extend( settings, options );
       }
 
+      // when the submit event on the form fires, close the autocomplete
+      // this is helpful only when the submit event will load something
+      // via ajax .. it makes no sense if the HTML is completely rendered again
+      $form = $(this.form);
+      $form.submit(function() { $this.data("autocomplete").close();});
+      
       $this.autocomplete( {
         source: settings.sourceCallback,
         delay: settings.delay,
