@@ -44,7 +44,7 @@
       // when the submit event on the form fires, close the autocomplete
       // this is helpful only when the submit event will load something
       // via ajax .. it makes no sense if the HTML is completely rendered again
-      $form = $(this.form);
+      var $form = $(this.form);
       $form.submit(function() { $this.data("autocomplete").close();});
       
       $this.autocomplete( {
