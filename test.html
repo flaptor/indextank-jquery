@@ -4,19 +4,20 @@
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="jquery.indextank-autocomplete.js"></script>
+        <script type="text/javascript" src="jquery.indextank.ize.js"></script>
         <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/south-street/jquery-ui.css" media="all" />
 
 
         <script>
             $(document).ready(function(){
-                $("#query").autocompleteWithIndextank("http://djsqg.api.indextank.com", "site", "text");
+                $("#myform").indextank_Ize("http://djsqg.api.indextank.com", "site");
             });
         </script>
     </head>
+
     <body>
         <h3>Start typing and see suggestions from indextank.com's documentation.</h3>
-        <form action="ignored.html">
+        <form id="myform" action="ignored.html">
             <input id="query" type="text"/>
         </form>
 
