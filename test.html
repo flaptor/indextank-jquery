@@ -5,12 +5,16 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
         <script type="text/javascript" src="jquery.indextank.ize.js"></script>
+        <script type="text/javascript" src="jquery.indextank.autocomplete.js"></script>
+        <script type="text/javascript" src="jquery.indextank.ajaxsearch.js"></script>
         <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/south-street/jquery-ui.css" media="all" />
 
 
         <script>
             $(document).ready(function(){
                 $("#myform").indextank_Ize("http://djsqg.api.indextank.com", "site");
+                var ize = $("#myform").getIndextank_Ize();
+                $("#query").indextank_autocomplete().indextank_AjaxSearch(ize);
             });
         </script>
     </head>
