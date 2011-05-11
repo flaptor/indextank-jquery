@@ -18,32 +18,21 @@
         base.init = function(){
             
             base.options = $.extend({},$.Indextank.AjaxSearch.defaultOptions, options);
+            base.xhr = undefined;
             
             
-            // make enter submit the form
-            /*
-            base.$el.keypress(function (e) {
-                if (e.which == 13) 
-                    $(base.el.form).submit()
-            });
-            */
-
             // TODO: make sure ize is an Indextank.Ize element somehow
-            var ize = $(base.el.form).data("Indextank.Ize");
-            ize.$el.submit(function(e){
+            base.ize = $(base.el.form).data("Indextank.Ize");
+            base.ize.$el.submit(function(e){
                 // make sure the form is not submitted
                 e.preventDefault();
+                base.runQuery();
+            });
 
-                base.options.listeners.trigger("Indextank.AjaxSearch.searching");
-                base.$el.trigger("Indextank.AjaxSearch.searching");
 
-                // run the query, with ajax
-                $.ajax( {
-                    url: ize.apiurl + "/v1/indexes/" + ize.indexName + "/search",
-                    dataType: "jsonp",
-                    data: { q: base.el.value, fetch: base.options.fields, snippet: base.options.snippets },
-                    success: function( data ) { base.options.listeners.trigger("Indextank.AjaxSearch.success", data); }
-                } );
+            // make it possible for other to trigger an ajax search
+            base.$el.bind( "Indextank.AjaxSearch.runQuery", function (event, term ) {
+                base.runQuery(term);
             });
         };
         
@@ -51,6 +40,34 @@
         // base.functionName = function(paramaters){
         // 
         // };
+
+            base.runQuery = function( term ) {
+                // if we are running a query, an old one makes no sense.
+                if (base.xhr != undefined ) {
+                    base.xhr.abort();
+                }
+               
+                // don't run a query twice
+                var query = term || base.el.value;
+                if (base.query == query) {
+                    return;
+                } 
+
+                // remember the current running query
+                base.query = query;
+
+                base.options.listeners.trigger("Indextank.AjaxSearch.searching");
+                base.$el.trigger("Indextank.AjaxSearch.searching");
+
+
+                // run the query, with ajax
+                base.xhr = $.ajax( {
+                    url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
+                    dataType: "jsonp",
+                    data: { q: query, fetch: base.options.fields, snippet: base.options.snippets },
+                    success: function( data ) { data.query = query; base.options.listeners.trigger("Indextank.AjaxSearch.success", data); }
+                } );
+            } 
         
         // Run initializer
         base.init();

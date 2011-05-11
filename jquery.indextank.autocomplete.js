@@ -32,7 +32,7 @@
                                 url: ize.apiurl + "/v1/indexes/" + ize.indexName + "/autocomplete",
                                 dataType: "jsonp",
                                 data: { query: request.term, field: base.options.fieldName },
-                                success: function( data ) { responseCallback( data.suggestions ); }
+                                success: function( data ) { responseCallback(data.suggestions); base.$el.trigger("Indextank.Autocomplete.success", data.suggestions); }
                             } );
                         },
                 minLength: base.options.minLength,
@@ -47,8 +47,8 @@
             // and also disable it when Indextank.AjaxSearch is searching .. 
             base.$el.bind("Indextank.AjaxSearch.searching", function(e) {
                 // hacky way to abort a request on jquery.ui.autocomplete.
-                base.$el.data("autocomplete").disable();
-                window.setTimeout(function(){base.$el.data("autocomplete").enable();}, 1000);
+                //base.$el.data("autocomplete").disable();
+                //window.setTimeout(function(){base.$el.data("autocomplete").enable();}, 1000);
             });
         };
         
