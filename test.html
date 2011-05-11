@@ -7,30 +7,34 @@
         <script type="text/javascript" src="jquery.indextank.ize.js"></script>
         <script type="text/javascript" src="jquery.indextank.autocomplete.js"></script>
         <script type="text/javascript" src="jquery.indextank.ajaxsearch.js"></script>
+        <script type="text/javascript" src="jquery.indextank.renderer.js"></script>
+        <script type="text/javascript" src="jquery.indextank.basic.js"></script>
         <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/south-street/jquery-ui.css" media="all" />
 
 
         <script>
             $(document).ready(function(){
+                $("#basicMagic").indextank_Basic("http://djsqg.api.indextank.com", "site");
+                /*
                 $("#myform").indextank_Ize("http://djsqg.api.indextank.com", "site");
-                var ize = $("#myform").getIndextank_Ize();
-                $("#query").indextank_autocomplete().indextank_AjaxSearch(ize);
+                $("#query").indextank_Autocomplete().indextank_AjaxSearch( {listeners: $("#results")});
+                $("#results").indextank_Renderer();
+                */
             });
         </script>
     </head>
 
     <body>
         <h3>Start typing and see suggestions from indextank.com's documentation.</h3>
+        <!--
         <form id="myform" action="ignored.html">
             <input id="query" type="text"/>
         </form>
 
-        <div>You may want to try
-        <ul>
-            <li>rub</li>
-            <li>think</li>
-            <li>jav</li>
-        </ul>
-        </div>
+
+        <div id="results"></div>
+
+        -->
+        <div id="basicMagic"></div>
     </body>
 </html>

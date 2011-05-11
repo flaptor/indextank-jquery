@@ -3,7 +3,7 @@
         $.Indextank = new Object();
     };
     
-    $.Indextank.autocomplete = function(el, options){
+    $.Indextank.Autocomplete = function(el, options){
         // To avoid scope issues, use 'base' instead of 'this'
         // to reference this class from internal events and functions.
         var base = this;
@@ -13,13 +13,13 @@
         base.el = el;
         
         // Add a reverse reference to the DOM object
-        base.$el.data("Indextank.autocomplete", base);
+        base.$el.data("Indextank.Autocomplete", base);
         
         base.init = function(){
-            base.options = $.extend({},$.Indextank.autocomplete.defaultOptions, options);
+            base.options = $.extend({},$.Indextank.Autocomplete.defaultOptions, options);
             
             // Put your initialization code here
-            var ize = $(base.$el[0].form).data("Indextank.Ize");
+            var ize = $(base.el.form).data("Indextank.Ize");
 
             base.$el.autocomplete({
                 select: function( event, ui ) {
@@ -29,7 +29,7 @@
                         },
                 source: function ( request, responseCallback ) {
                             $.ajax( {
-                                url: ize.apikey + "/v1/indexes/" + ize.indexName + "/autocomplete",
+                                url: ize.apiurl + "/v1/indexes/" + ize.indexName + "/autocomplete",
                                 dataType: "jsonp",
                                 data: { query: request.term, field: base.options.fieldName },
                                 success: function( data ) { responseCallback( data.suggestions ); }
@@ -43,6 +43,13 @@
             ize.$el.submit(function(e){
                 base.$el.data("autocomplete").close();
             });
+
+            // and also disable it when Indextank.AjaxSearch is searching .. 
+            base.$el.bind("Indextank.AjaxSearch.searching", function(e) {
+                // hacky way to abort a request on jquery.ui.autocomplete.
+                base.$el.data("autocomplete").disable();
+                window.setTimeout(function(){base.$el.data("autocomplete").enable();}, 1000);
+            });
         };
         
         // Sample Function, Uncomment to use
@@ -54,22 +61,22 @@
         base.init();
     };
     
-    $.Indextank.autocomplete.defaultOptions = {
+    $.Indextank.Autocomplete.defaultOptions = {
         fieldName: "text",
         minLength: 2,
         delay: 100
     };
     
-    $.fn.indextank_autocomplete = function(options){
+    $.fn.indextank_Autocomplete = function(options){
         return this.each(function(){
-            (new $.Indextank.autocomplete(this, options));
+            (new $.Indextank.Autocomplete(this, options));
         });
     };
     
     // This function breaks the chain, but returns
     // the Indextank.autocomplete if it has been attached to the object.
-    $.fn.getIndextank_autocomplete = function(){
-        this.data("Indextank.autocomplete");
+    $.fn.getIndextank_Autocomplete = function(){
+        this.data("Indextank.Autocomplete");
     };
     
 })(jQuery);

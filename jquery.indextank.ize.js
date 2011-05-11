@@ -3,7 +3,7 @@
         $.Indextank = new Object();
     };
     
-    $.Indextank.Ize = function(el, apikey, indexName, options){
+    $.Indextank.Ize = function(el, apiurl, indexName, options){
         // To avoid scope issues, use 'base' instead of 'this'
         // to reference this class from internal events and functions.
         var base = this;
@@ -16,7 +16,7 @@
         base.$el.data("Indextank.Ize", base);
         
         base.init = function(){
-            base.apikey = apikey;
+            base.apiurl = apiurl;
             base.indexName = indexName;
             
             base.options = $.extend({},$.Indextank.Ize.defaultOptions, options);
@@ -36,9 +36,9 @@
     $.Indextank.Ize.defaultOptions = {
     };
     
-    $.fn.indextank_Ize = function(apikey, indexName, options){
+    $.fn.indextank_Ize = function(apiurl, indexName, options){
         return this.each(function(){
-            (new $.Indextank.Ize(this, apikey, indexName, options));
+            (new $.Indextank.Ize(this, apiurl, indexName, options));
         });
     };
     

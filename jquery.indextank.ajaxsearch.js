@@ -3,7 +3,7 @@
         $.Indextank = new Object();
     };
     
-    $.Indextank.AjaxSearch = function(el, ize, options){
+    $.Indextank.AjaxSearch = function(el, options){
         // To avoid scope issues, use 'base' instead of 'this'
         // to reference this class from internal events and functions.
         var base = this;
@@ -16,22 +16,33 @@
         base.$el.data("Indextank.AjaxSearch", base);
         
         base.init = function(){
-            base.ize = ize;
             
             base.options = $.extend({},$.Indextank.AjaxSearch.defaultOptions, options);
             
-            // Put your initialization code here
+            
+            // make enter submit the form
+            /*
+            base.$el.keypress(function (e) {
+                if (e.which == 13) 
+                    $(base.el.form).submit()
+            });
+            */
+
             // TODO: make sure ize is an Indextank.Ize element somehow
+            var ize = $(base.el.form).data("Indextank.Ize");
             ize.$el.submit(function(e){
                 // make sure the form is not submitted
                 e.preventDefault();
+
+                base.options.listeners.trigger("Indextank.AjaxSearch.searching");
+                base.$el.trigger("Indextank.AjaxSearch.searching");
 
                 // run the query, with ajax
                 $.ajax( {
                     url: ize.apiurl + "/v1/indexes/" + ize.indexName + "/search",
                     dataType: "jsonp",
-                    data: { query: base.$el.value, field: fieldName },
-                    success: function( data ) { $.trigger("Indextank.AjaxSearch.success", data); }
+                    data: { q: base.el.value, fetch: base.options.fields, snippet: base.options.snippets },
+                    success: function( data ) { base.options.listeners.trigger("Indextank.AjaxSearch.success", data); }
                 } );
             });
         };
@@ -46,11 +57,17 @@
     };
     
     $.Indextank.AjaxSearch.defaultOptions = {
+        // default fields to fetch .. 
+        fields : "name,title,image,url,link",
+        // fields to make snippets for
+        snippets : "text",
+        // no one listening .. sad
+        listeners: []
     };
     
-    $.fn.indextank_AjaxSearch = function(ize, options){
+    $.fn.indextank_AjaxSearch = function(options){
         return this.each(function(){
-            (new $.Indextank.AjaxSearch(this, ize, options));
+            (new $.Indextank.AjaxSearch(this, options));
         });
     };
     
