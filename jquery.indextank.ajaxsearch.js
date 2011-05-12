@@ -42,16 +42,17 @@
         // };
 
             base.runQuery = function( term ) {
-                // if we are running a query, an old one makes no sense.
-                if (base.xhr != undefined ) {
-                    base.xhr.abort();
-                }
-               
                 // don't run a query twice
                 var query = term || base.el.value;
                 if (base.query == query) {
                     return;
                 } 
+                
+                // if we are running a query, an old one makes no sense.
+                if (base.xhr != undefined ) {
+                    base.xhr.abort();
+                }
+               
 
                 // remember the current running query
                 base.query = query;
