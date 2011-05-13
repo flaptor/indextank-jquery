@@ -28,3 +28,29 @@ If you met this requirements, just:
     - the indextank_Autocomplete()'d element matches the INPUT id.
     - the indextank_Renderer()'d element matches the DIV id.
 3. Write a query on your search box
+
+## OK, but I want results rendered different. Can I do that?
+
+Sure you can!
+You'll need to write a **format** function, that takes a result as argument and returns the rendered HTML. 
+
+Example
+
+    var userFormat = function(item) {
+        var r = $("<div></div>").addClass("result").addClass("user")
+                .append( $("<img></img>").attr("src", item.avatar ) )
+                .append( $("<a></a>").attr("href", item.url).html(item.snippet_name || item.name) )
+                .append( $("<span></span>").addClass("location").text(item.hometown || "far far away") );
+
+        // some items need a slightly different rendering
+        if (item.is_staff == "true") {
+                r.addClass("staff");
+        } 
+
+        return r;
+    };
+
+And then tell your renderer to use it
+
+    $("#results").indextank_Renderer({format: userFormat});
+
