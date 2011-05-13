@@ -54,3 +54,13 @@ And then tell your renderer to use it
 
     $("#results").indextank_Renderer({format: userFormat});
 
+
+## Dependencies
+
+indextank-jquery relies on
+
+- [jquery](https://github.com/jquery/jquery) > 1.4.3 
+- [jquery-ui](https://github.com/jquery/jquery-ui) > 1.8.
+ 
+You can hotlink them from github, download them and serve them yourself, or use google ajax apis.
+Just make sure you import them in order, before importing indextank-jquery files.
