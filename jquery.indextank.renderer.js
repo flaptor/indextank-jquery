@@ -26,11 +26,8 @@
             base.$el.bind("Indextank.AjaxSearch.success", function(e, data) {
                 base.$el.html("");
                 $(data.results).each( function (i, item) {
-                    var r = $("<div></div>")
-                            .addClass("result")
-                            .append( $("<a></a>").attr("href", item.link || item.url ).text(item.title || item.name))
-                            .append( $("<span></span>").addClass("description").html(item.snippet_text || item.text) )
-                            .appendTo(base.$el);
+                    var r = base.options.format(item);
+                    r.appendTo(base.$el);
                 });
                 base.$el.css({opacity: 1});
             });
@@ -47,6 +44,12 @@
     };
     
     $.Indextank.Renderer.defaultOptions = {
+        format: function(item){
+                    return $("<div></div>")
+                            .addClass("result")
+                            .append( $("<a></a>").attr("href", item.link || item.url ).text(item.title || item.name) )
+                            .append( $("<span></span>").addClass("description").html(item.snippet_text || item.text) );
+                    }
     };
     
     $.fn.indextank_Renderer = function(options){
