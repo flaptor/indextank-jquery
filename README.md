@@ -12,7 +12,7 @@ If you just want to see it working on your index, just:
 4. Find test.html, and add there your API URL, and INDEX NAME
 5. Point your browser to test.html, and type a query
 
-## I like it, how do I use it on my site ? 
+## I like it, how do I use it on my site? 
 
 I assume you have a search template, and it has:
 
@@ -20,7 +20,7 @@ I assume you have a search template, and it has:
 - an INPUT element with type=text, and an id. This element is a child of the FORM element above.
 - a DIV element with an id, that we can use to display results.
 
-If you met this requirements, just:
+If you met these requirements, follow these steps:
 
 1. Copy the **&lt;head&gt;** element of test.html on the **&lt;head&gt;** element of your site's template. If you didn't go through the **Quick usage** section above, place your indextank credentials on it.
 2. Edit the script, so that:
@@ -29,10 +29,10 @@ If you met this requirements, just:
     - the indextank_Renderer()'d element matches the DIV id.
 3. Write a query on your search box
 
-## OK, but I want results rendered different. Can I do that?
+## OK, but I want results rendered differently. Can I do that?
 
 Sure you can!
-You'll need to write a **format** function, that takes a result as argument and returns the rendered HTML. 
+You'll need to write a **format** function that takes a result as argument and returns the rendered HTML. 
 
 Example
 
