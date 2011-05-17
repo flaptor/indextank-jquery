@@ -43,7 +43,7 @@
 
             base.runQuery = function( term ) {
                 // don't run a query twice
-                var query = term || base.el.value;
+                var query = base.options.rewriteQuery( term || base.el.value );
                 if (base.query == query) {
                     return;
                 } 
@@ -65,7 +65,7 @@
                 base.xhr = $.ajax( {
                     url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
                     dataType: "jsonp",
-                    data: { q: base.options.rewriteQuery(query), fetch: base.options.fields, snippet: base.options.snippets },
+                    data: { q: query, fetch: base.options.fields, snippet: base.options.snippets },
                     success: function( data ) { data.query = query; base.options.listeners.trigger("Indextank.AjaxSearch.success", data); }
                 } );
             } 
