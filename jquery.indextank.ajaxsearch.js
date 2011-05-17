@@ -65,7 +65,7 @@
                 base.xhr = $.ajax( {
                     url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
                     dataType: "jsonp",
-                    data: { q: query, fetch: base.options.fields, snippet: base.options.snippets },
+                    data: { q: base.options.rewriteQuery(query), fetch: base.options.fields, snippet: base.options.snippets },
                     success: function( data ) { data.query = query; base.options.listeners.trigger("Indextank.AjaxSearch.success", data); }
                 } );
             } 
@@ -80,7 +80,9 @@
         // fields to make snippets for
         snippets : "text",
         // no one listening .. sad
-        listeners: []
+        listeners: [],
+        // the default query re-writer is identity
+        rewriteQuery: function(q) {return q}
     };
     
     $.fn.indextank_AjaxSearch = function(options){
