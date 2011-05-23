@@ -65,8 +65,19 @@
                 base.xhr = $.ajax( {
                     url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
                     dataType: "jsonp",
-                    data: { q: query, fetch: base.options.fields, snippet: base.options.snippets },
-                    success: function( data ) { data.query = query; base.options.listeners.trigger("Indextank.AjaxSearch.success", data); }
+                    data: { 
+                            "q": query, 
+                            "fetch": base.options.fields, 
+                            "snippet": base.options.snippets, 
+                            "function": base.options.scoringFunction 
+                          },
+                    success: function( data ) { 
+                                // Indextank API does not send the query.
+                                // I'll save the current query inside 'data',
+                                // so our listeners can use it.
+                                data.query = query; 
+                                base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
+                                }
                 } );
             } 
         
@@ -81,6 +92,8 @@
         snippets : "text",
         // no one listening .. sad
         listeners: [],
+        // scoring function to use
+        scoringFunction: 0,
         // the default query re-writer is identity
         rewriteQuery: function(q) {return q}
     };
