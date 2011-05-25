@@ -31,8 +31,8 @@
 
 
             // make it possible for other to trigger an ajax search
-            base.$el.bind( "Indextank.AjaxSearch.runQuery", function (event, term ) {
-                base.runQuery(term);
+            base.$el.bind( "Indextank.AjaxSearch.runQuery", function (event, term, start, rsLength ) {
+                base.runQuery(term, start, rsLength);
             });
         };
         
@@ -41,10 +41,13 @@
         // 
         // };
 
-            base.runQuery = function( term ) {
+            base.runQuery = function( term, start, rsLength ) {
                 // don't run a query twice
                 var query = base.options.rewriteQuery( term || base.el.value );
-                if (base.query == query) {
+                start = start || 0;
+                rsLength = rsLength || 10;
+
+                if (base.query == query && base.start == start && base.rsLength == rsLength ) {
                     return;
                 } 
                 
@@ -56,6 +59,8 @@
 
                 // remember the current running query
                 base.query = query;
+                base.start = start;
+                base.rsLength = rsLength;
 
                 base.options.listeners.trigger("Indextank.AjaxSearch.searching");
                 base.$el.trigger("Indextank.AjaxSearch.searching");
@@ -69,13 +74,17 @@
                             "q": query, 
                             "fetch": base.options.fields, 
                             "snippet": base.options.snippets, 
-                            "function": base.options.scoringFunction 
+                            "function": base.options.scoringFunction,
+                            "start": start,
+                            "len": rsLength
                           },
                     success: function( data ) { 
-                                // Indextank API does not send the query.
+                                // Indextank API does not send the query, nor start or rsLength
                                 // I'll save the current query inside 'data',
                                 // so our listeners can use it.
-                                data.query = query; 
+                                data.query = query;
+                                data.start = start;
+                                data.rsLength = rsLength;
                                 base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
                                 }
                 } );
