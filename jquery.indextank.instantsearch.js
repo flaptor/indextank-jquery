@@ -18,15 +18,17 @@
         base.init = function(){
             base.options = $.extend({},$.Indextank.InstantSearch.defaultOptions, options);
            
-            // make autocomplete focus trigger an AjaxSearch
-            base.$el.bind( "autocompletefocus", function (event, ui) {
-                base.$el.trigger( "Indextank.AjaxSearch.runQuery", ui.item.value );
-            }); 
-
             // make autocomplete trigger a query when suggestions appear
             base.$el.bind( "Indextank.Autocomplete.success", function (event, suggestions ) {
                 base.$el.trigger( "Indextank.AjaxSearch.runQuery", suggestions );
             });
+            
+            // make autocomplete focus trigger an AjaxSearch, only if requested
+            if (base.options.focusTriggersSearch) { 
+                base.$el.bind( "autocompletefocus", function (event, ui) {
+                    base.$el.trigger( "Indextank.AjaxSearch.runQuery", ui.item.value );
+                }); 
+            } 
 
         };
         
@@ -40,6 +42,12 @@
     };
     
     $.Indextank.InstantSearch.defaultOptions = {
+        // trigger a query whenever an option on the autocomplete box is 
+        // focused. Either by keyboard or mouse hover.
+        // Note that setting this to true can be annoying if your search box is
+        // above the result set, as moving the mouse over the suggestions will
+        // change the result set.
+        focusTriggersSearch : false
     };
     
     $.fn.indextank_InstantSearch = function(options){
