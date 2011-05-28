@@ -44,8 +44,8 @@
             base.runQuery = function( term, start, rsLength ) {
                 // don't run a query twice
                 var query = base.options.rewriteQuery( term || base.el.value );
-                start = start || 0;
-                rsLength = rsLength || 10;
+                start = start || base.options.start;
+                rsLength = rsLength || base.options.rsLength;
 
                 if (base.query == query && base.start == start && base.rsLength == rsLength ) {
                     return;
@@ -95,6 +95,12 @@
     };
     
     $.Indextank.AjaxSearch.defaultOptions = {
+        // first result to fetch .. it can be overrided at query-time,
+        // but we need a default. 99.95% of the times you'll want to keep the default
+        start : 0,
+        // how many results to fetch on every query? 
+        // it can be overriden at query-time.
+        rsLength : 10, 
         // default fields to fetch .. 
         fields : "name,title,image,url,link",
         // fields to make snippets for
