@@ -26,14 +26,23 @@
             base.ize.$el.submit(function(e){
                 // make sure the form is not submitted
                 e.preventDefault();
-                base.runQuery();
+                base.runQuery( base.getDefaultQuery().withQueryString(base.el.value) );
             });
 
 
             // make it possible for other to trigger an ajax search
-            base.$el.bind( "Indextank.AjaxSearch.runQuery", function (event, term, start, rsLength ) {
-                base.runQuery(term, start, rsLength);
+            base.$el.bind( "Indextank.AjaxSearch.runQuery", function (event, query) {
+                base.runQuery(query);
             });
+
+            // create the default query, and map default parameters on it
+            base.defaultQuery = new Query("")
+                                    .withStart(base.options.start)
+                                    .withLength(base.options.rsLength)
+                                    .withFetchFields(base.options.fields)
+                                    .withSnippetFields(base.options.snippets)
+                                    .withScoringFunction(base.options.scoringFunction)
+                                    .withQueryReWriter(base.options.rewriteQuery);
         };
         
         // Sample Function, Uncomment to use
@@ -41,13 +50,15 @@
         // 
         // };
 
-            base.runQuery = function( term, start, rsLength ) {
-                // don't run a query twice
-                var query = base.options.rewriteQuery( term || base.el.value );
-                start = start || base.options.start;
-                rsLength = rsLength || base.options.rsLength;
+        // gets a copy of the default query.
+        base.getDefaultQuery = function() {
+            return base.defaultQuery.clone();
+        };
 
-                if (base.query == query && base.start == start && base.rsLength == rsLength ) {
+
+            base.runQuery = function( query ) {
+                // don't run a query twice
+                if (base.query == query ) {
                     return;
                 } 
                 
@@ -59,8 +70,6 @@
 
                 // remember the current running query
                 base.query = query;
-                base.start = start;
-                base.rsLength = rsLength;
 
                 base.options.listeners.trigger("Indextank.AjaxSearch.searching");
                 base.$el.trigger("Indextank.AjaxSearch.searching");
@@ -70,21 +79,12 @@
                 base.xhr = $.ajax( {
                     url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
                     dataType: "jsonp",
-                    data: { 
-                            "q": query, 
-                            "fetch": base.options.fields, 
-                            "snippet": base.options.snippets, 
-                            "function": base.options.scoringFunction,
-                            "start": start,
-                            "len": rsLength
-                          },
+                    data: query.asParameterMap(),
                     success: function( data ) { 
-                                // Indextank API does not send the query, nor start or rsLength
+                                // Indextank API does not send the query back.
                                 // I'll save the current query inside 'data',
                                 // so our listeners can use it.
                                 data.query = query;
-                                data.start = start;
-                                data.rsLength = rsLength;
                                 base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
                                 }
                 } );
