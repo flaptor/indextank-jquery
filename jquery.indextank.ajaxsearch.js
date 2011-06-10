@@ -70,6 +70,7 @@
                 base.xhr = $.ajax( {
                     url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
                     dataType: "jsonp",
+		    timeout: 1000,
                     data: { 
                             "q": query, 
                             "fetch": base.options.fields, 
@@ -86,8 +87,13 @@
                                 data.start = start;
                                 data.rsLength = rsLength;
                                 base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
-                                }
-                } );
+                                },
+		    error: function (jqXHR, textStatus, errorThrown) {
+				base.options.listeners.trigger("Indextank.AjaxSearch.failure");
+				},
+			
+		} );
+
             } 
         
         // Run initializer
