@@ -70,7 +70,7 @@
         format: function( item , options ) {
 
             function hl(text, query){
-                rx = new RegExp(query,'i');
+                rx = new RegExp(query,'ig');
                 bolds = $.map(text.match(rx) || [], function(i) { return "<span class='highlighted'>"+i+"</span>";});
                 regulars = $( $.map(text.split(rx), function(i){ return $("<span></span>").addClass("regular").text(i).get(0);}));
 
