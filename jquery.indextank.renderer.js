@@ -32,7 +32,7 @@
                 base.$el.css({opacity: 1});
             });
             
-	    base.$el.bind("Indextank.AjaxSearch.failure", function(e) {
+            base.$el.bind("Indextank.AjaxSearch.failure", function(e) {
                 base.$el.css({opacity: 1});
             });
             

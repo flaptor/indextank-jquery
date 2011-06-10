@@ -23,17 +23,11 @@
             
             // TODO: make sure ize is an Indextank.Ize element somehow
             base.ize = $(base.el.form).data("Indextank.Ize");
-            base.ize.$el.submit(function(e){
-                // make sure the form is not submitted
-                e.preventDefault();
-                base.runQuery();
-            });
+            base.ize.$el.bind("submit", base.hijackFormSubmit);
 
 
             // make it possible for other to trigger an ajax search
-            base.$el.bind( "Indextank.AjaxSearch.runQuery", function (event, term, start, rsLength ) {
-                base.runQuery(term, start, rsLength);
-            });
+            base.$el.bind( "Indextank.AjaxSearch.runQuery", base.runQuery );
         };
         
         // Sample Function, Uncomment to use
@@ -41,7 +35,7 @@
         // 
         // };
 
-            base.runQuery = function( term, start, rsLength ) {
+            base.runQuery = function( event, term, start, rsLength ) {
                 // don't run a query twice
                 var query = base.options.rewriteQuery( term || base.el.value );
                 start = start || base.options.start;
@@ -70,7 +64,7 @@
                 base.xhr = $.ajax( {
                     url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
                     dataType: "jsonp",
-		    timeout: 1000,
+                    timeout: 1000,
                     data: { 
                             "q": query, 
                             "fetch": base.options.fields, 
@@ -88,14 +82,27 @@
                                 data.rsLength = rsLength;
                                 base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
                                 },
-		    error: function (jqXHR, textStatus, errorThrown) {
-				base.options.listeners.trigger("Indextank.AjaxSearch.failure");
-				},
-			
-		} );
-
+                    error: function( jqXHR, textStatus, errorThrown) {
+                                base.options.listeners.trigger("Indextank.AjaxSearch.failure");
+                    }
+                } );
             } 
-        
+
+        base.hijackFormSubmit = function(event) {
+            // make sure the form is not submitted
+            event.preventDefault();
+            base.runQuery();
+        };
+
+
+        // unbind everything
+        base.destroy = function() {
+            base.$el.unbind("Indextank.AjaxSearch.runQuery", base.runQuery);
+            base.ize.$el.unbind("submit", base.hijackFormSubmit);
+            base.$el.removeData("Indextank.AjaxSearch");
+        };
+
+
         // Run initializer
         base.init();
     };
@@ -112,7 +119,7 @@
         // fields to make snippets for
         snippets : "text",
         // no one listening .. sad
-        listeners: [],
+        listeners: $([]),
         // scoring function to use
         scoringFunction: 0,
         // the default query re-writer is identity
