@@ -58,3 +58,24 @@ test( "it changes target CSS on AjaxSearch failure", function() {
   notDeepEqual(t.style, {});
 
 });
+
+test( "it changes target CSS on AjaxSearch success", function() {
+  expect(1);
+
+  t = $("<div/>");
+  var resultSet = {
+        query: "a query",
+        results: [1, 2, 3, 4]
+  };
+  var fmt = function(item) {
+    return $("<span/>");
+  };
+  r = $(t).indextank_Renderer({format: fmt});
+  r.trigger("Indextank.AjaxSearch.success", resultSet);
+
+  // the style should somehow change.
+  // opacity at this time.
+  // TODO change this test whenever Renderer allows to modify this behavior.
+  notDeepEqual(t.attr('style'), undefined);
+
+});
