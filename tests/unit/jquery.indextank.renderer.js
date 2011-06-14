@@ -1,5 +1,17 @@
 module("Module Renderer", { 
     setup: function() {
+        this.resultSet = {
+            query: "a query",
+            results: [1, 2, 3, 4]
+        };
+        this.dummyFmt = function(item) {
+            return $("<span/>");
+        };
+        this.okFmt = function(item) {
+            ok(true);
+            // return a dummy object
+            return $("<span/>");
+        };
     },
     teardown: function() {
     }
@@ -10,21 +22,9 @@ module("Module Renderer", {
 test( "check it calls format function for each result", function() {
   expect(4);
 
-  var resultSet = {
-        query: "a query",
-        results: [1, 2, 3, 4]
-  };
+  r = $("<div/>").indextank_Renderer({format: this.okFmt});
 
-  var fmt = function(item) {
-    ok(true);
-
-    // return a dummy object
-    return $("<span/>");
-  };
-
-  r = $("<div/>").indextank_Renderer({format: fmt});
-
-  r.trigger("Indextank.AjaxSearch.success", resultSet);
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
   
 });
 
@@ -63,15 +63,8 @@ test( "it changes target CSS on AjaxSearch success", function() {
   expect(1);
 
   t = $("<div/>");
-  var resultSet = {
-        query: "a query",
-        results: [1, 2, 3, 4]
-  };
-  var fmt = function(item) {
-    return $("<span/>");
-  };
-  r = $(t).indextank_Renderer({format: fmt});
-  r.trigger("Indextank.AjaxSearch.success", resultSet);
+  r = $(t).indextank_Renderer({format: this.dummyFmt});
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
 
   // the style should somehow change.
   // opacity at this time.
