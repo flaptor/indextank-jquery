@@ -11,6 +11,7 @@ module("Module Autocomplete", {
         $.mockjaxClear();
         $("#myform").removeData("Indextank.Ize");
         $("#query").data("Indextank.AjaxSearch").destroy();
+        $("#query").autocomplete("destroy");
     }
 });
 
