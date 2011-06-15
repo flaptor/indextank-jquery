@@ -43,3 +43,30 @@ test("calls data('autocomplete').close() on submit", function() {
     $('#query').submit();
     ok(ac_widget.menu.element.is(":hidden"), "gets set to hidden");
 });
+
+test("notifies about getting suggestions", function() {
+
+    expect(2);
+
+    var suggestions = ["new", "newton"] ;
+
+    var l = function(event, s) {
+        equal(suggestions[0], s[0]);
+        equal(suggestions[1], s[1]);
+    };
+    
+    $.mockjax({
+        url: this.apiurl + '/v1/indexes/' + this.indexName + '/autocomplete',
+        responseText: { query:'ne', suggestions: suggestions }
+        });
+
+    $("#query").bind("Indextank.Autocomplete.success", l);
+
+    $('#query').val('ne');
+    $('#query').autocomplete('search');
+
+
+    // cleanup
+    $("#query").unbind("Indextank.Autocomplete.success", l);
+   
+});

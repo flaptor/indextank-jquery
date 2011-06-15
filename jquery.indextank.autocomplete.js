@@ -32,7 +32,7 @@
                                 url: ize.apiurl + "/v1/indexes/" + ize.indexName + "/autocomplete",
                                 dataType: "jsonp",
                                 data: { query: request.term, field: base.options.fieldName },
-                                success: function( data ) { responseCallback(data.suggestions); base.$el.trigger("Indextank.Autocomplete.success", data.suggestions); }
+                                success: function( data ) { responseCallback(data.suggestions); base.$el.trigger("Indextank.Autocomplete.success", [data.suggestions]); }
                             } );
                         },
                 minLength: base.options.minLength,
