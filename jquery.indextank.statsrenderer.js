@@ -26,6 +26,10 @@
                 var stats = base.options.format(data);
                 stats.appendTo(base.$el);
             });
+
+            base.$el.bind( "Indextank.AjaxSearch.noResults", function (event, query) {
+                base.$el.show();
+                base.$el.html("");
         };
         
         
