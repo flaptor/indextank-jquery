@@ -23,6 +23,17 @@
             
             // TODO: make sure ize is an Indextank.Ize element somehow
             base.ize = $(base.el.form).data("Indextank.Ize");
+            
+            // create the default query, and map default parameters on it
+            base.defaultQuery = new Query("")
+                                    .withStart(base.options.start)
+                                    .withLength(base.options.rsLength)
+                                    .withFetchFields(base.options.fields)
+                                    .withSnippetFields(base.options.snippets)
+                                    .withScoringFunction(base.options.scoringFunction)
+                                    .withQueryReWriter(base.options.rewriteQuery);
+            
+            
             base.ize.$el.bind("submit", base.hijackFormSubmit);
 
 
@@ -35,63 +46,54 @@
         // 
         // };
 
-            base.runQuery = function( event, term, start, rsLength ) {
-                // don't run a query twice
-                var query = base.options.rewriteQuery( term || base.el.value );
-                start = start || base.options.start;
-                rsLength = rsLength || base.options.rsLength;
-
-                if (base.query == query && base.start == start && base.rsLength == rsLength ) {
-                    return;
-                } 
-                
-                // if we are running a query, an old one makes no sense.
-                if (base.xhr != undefined ) {
-                    base.xhr.abort();
-                }
-               
-
-                // remember the current running query
-                base.query = query;
-                base.start = start;
-                base.rsLength = rsLength;
-
-                base.options.listeners.trigger("Indextank.AjaxSearch.searching");
-                base.$el.trigger("Indextank.AjaxSearch.searching");
-
-
-                // run the query, with ajax
-                base.xhr = $.ajax( {
-                    url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
-                    dataType: "jsonp",
-                    timeout: 1000,
-                    data: { 
-                            "q": query, 
-                            "fetch": base.options.fields, 
-                            "snippet": base.options.snippets, 
-                            "function": base.options.scoringFunction,
-                            "start": start,
-                            "len": rsLength
-                          },
-                    success: function( data ) { 
-                                // Indextank API does not send the query, nor start or rsLength
-                                // I'll save the current query inside 'data',
-                                // so our listeners can use it.
-                                data.query = query;
-                                data.start = start;
-                                data.rsLength = rsLength;
-                                base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
-                                },
-                    error: function( jqXHR, textStatus, errorThrown) {
-                                base.options.listeners.trigger("Indextank.AjaxSearch.failure");
-                    }
-                } );
+        // gets a copy of the default query.
+        base.getDefaultQuery = function() {
+            return base.defaultQuery.clone();
+        };
+            
+            
+        base.runQuery = function( event, query ) {
+            // don't run a query twice
+            if (base.query == query ) {
+                return;
             } 
+            
+            // if we are running a query, an old one makes no sense.
+            if (base.xhr != undefined ) {
+                base.xhr.abort();
+            }
+           
+
+            // remember the current running query
+            base.query = query;
+
+            base.options.listeners.trigger("Indextank.AjaxSearch.searching");
+            base.$el.trigger("Indextank.AjaxSearch.searching");
+
+
+            // run the query, with ajax
+            base.xhr = $.ajax( {
+                url: base.ize.apiurl + "/v1/indexes/" + base.ize.indexName + "/search",
+                dataType: "jsonp",
+                data: query.asParameterMap(),
+                timeout: 1000,
+                success: function( data ) { 
+                            // Indextank API does not send the query back.
+                            // I'll save the current query inside 'data',
+                            // so our listeners can use it.
+                            data.query = query;
+                            base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
+                            },
+                error: function( jqXHR, textStatus, errorThrown) {
+                            base.options.listeners.trigger("Indextank.AjaxSearch.failure");
+                }
+            } );
+        } 
 
         base.hijackFormSubmit = function(event) {
             // make sure the form is not submitted
             event.preventDefault();
-            base.runQuery();
+            base.runQuery( event, base.getDefaultQuery().withQueryString(base.el.value) );
         };
 
 
