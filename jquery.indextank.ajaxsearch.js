@@ -39,12 +39,17 @@
 
             // make it possible for other to trigger an ajax search
             base.$el.bind( "Indextank.AjaxSearch.runQuery", base.runQuery );
+            base.$el.bind( "Indextank.AjaxSearch.displayNoResults", base.displayNoResults );
         };
         
         // Sample Function, Uncomment to use
         // base.functionName = function(paramaters){
         // 
         // };
+
+        base.displayNoResults = function() {
+            base.options.listeners.trigger("Indextank.AjaxSearch.noResults", base.el.value);
+        }
 
         // gets a copy of the default query.
         base.getDefaultQuery = function() {

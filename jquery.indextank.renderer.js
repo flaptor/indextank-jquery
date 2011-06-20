@@ -31,6 +31,10 @@
                 });
                 base.$el.css({opacity: 1});
             });
+
+            base.$el.bind("Indextank.AjaxSearch.noResults", function(e, query) {
+                base.$el.html("<div class='result'> No results were found for " + query + '.</div>');
+            });
             
             base.$el.bind("Indextank.AjaxSearch.failure", function(e) {
                 base.$el.css({opacity: 1});

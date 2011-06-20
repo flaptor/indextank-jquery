@@ -26,7 +26,7 @@
                     query.withQueryString(suggestions[0]);
                     // run it
                     base.$el.trigger( "Indextank.AjaxSearch.runQuery", query );
-                }
+                } else { base.$el.trigger( "Indextank.AjaxSearch.displayNoResults" ); }
             });
             
             // make autocomplete focus trigger an AjaxSearch, only if requested
