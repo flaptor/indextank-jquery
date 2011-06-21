@@ -2,7 +2,19 @@
     if(!$.Indextank){
         $.Indextank = new Object();
     };
-    
+
+    // this is a hacky way of getting querybuilder dependencies 
+    // XXX remove this once there's a minified / bundled version of indextank-jquery
+    try {
+        new Query();
+    } catch(e) {
+        // ok, I need to include querybuilder
+        var qscr = $("<script/>").attr("src", "https://raw.github.com/flaptor/indextank-jquery/master/querybuilder.js");
+        $("head").append(qscr);
+    }; 
+
+
+
     $.Indextank.AjaxSearch = function(el, options){
         // To avoid scope issues, use 'base' instead of 'this'
         // to reference this class from internal events and functions.
