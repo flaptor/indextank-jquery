@@ -30,6 +30,7 @@
             base.$el.bind( "Indextank.AjaxSearch.noResults", function (event, query) {
                 base.$el.show();
                 base.$el.html("");
+            });
         };
         
         
