@@ -10,6 +10,10 @@ module("Module InstantSearch", {
     teardown: function() { 
         $("#myform").removeData("Indextank.Ize");
         $("#query").data("Indextank.AjaxSearch").destroy();
+
+        // one of our tests add an 'ok(true)' on this event.
+        // it messes up further testing
+        $("#query").unbind("Indextank.AjaxSearch.searching");
     }
 });
 
