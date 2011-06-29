@@ -43,6 +43,8 @@
                                     .withFetchFields(base.options.fields)
                                     .withSnippetFields(base.options.snippets)
                                     .withScoringFunction(base.options.scoringFunction)
+                                    .withFetchVariables(base.options.fetchVariables)
+                                    .withFetchCategories(base.options.fetchCategories)
                                     .withQueryReWriter(base.options.rewriteQuery);
             
             
@@ -141,6 +143,10 @@
         listeners: $([]),
         // scoring function to use
         scoringFunction: 0,
+        // fetch all variables,
+        fetchVariables: 'true',
+        // fetch all categories,
+        fetchCategories: 'true',
         // the default query re-writer is identity
         rewriteQuery: function(q) {return q}
     };

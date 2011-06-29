@@ -100,6 +100,17 @@ Query.prototype.withQueryReWriter = function (qrw) {
     return this;
 }
 
+Query.prototype.withFetchVariables = function(fv) {
+    this.fetchVariables = fv;
+    return this;
+}
+
+Query.prototype.withFetchCategories = function(fc) {
+    this.fetchCategories = fc;
+    return this;
+}
+
+
 Query.prototype.clone = function() {
     q = new Query(this.queryString);
 
@@ -114,6 +125,8 @@ Query.prototype.clone = function() {
     if (this.functionFilters != null) q.functionFilters = this.functionFilters;
     if (this.queryVariables != null) q.queryVariables = this.queryVariables;
     if (this.queryReWriter != null) q.queryReWriter = this.queryReWriter;
+    if (this.fetchVariables != null) q.fetchVariables = this.fetchVariables;
+    if (this.fetchCategories != null) q.fetchCategories = this.fetchCategories;
 
     return q;
 }
@@ -137,6 +150,10 @@ Query.prototype.asParameterMap = function() {
         qMap['fetch'] = this.fetchFields.join(",");
     if (this.categoryFilters != null)
         qMap['category_filters'] = JSON.stringify(this.categoryFilters);
+    if (this.fetchVariables != null)
+        qMap['fetch_variables'] = this.fetchVariables;
+    if (this.fetchCategories != null)
+        qMap['fetch_categories'] = this.fetchCategories;
 
     if (this.documentVariableFilters != null) {
         for (dvf in this.documentVariableFilters) {
