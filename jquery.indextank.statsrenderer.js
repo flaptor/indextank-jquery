@@ -43,7 +43,7 @@
             var r = $("<div></div>")
                         .append( $("<strong></strong>").text(data.matches) )
                         .append( $("<span></span>").text(" " + (data.matches == 1 ? "result":"results" )+ " for ") )
-                        .append( $("<strong></strong>").text(data.query) )
+                        .append( $("<strong></strong>").text(data.query.queryString) )
                         .append( $("<span></span>").text(" in ") )
                         .append( $("<strong></strong>").text(data.search_time) )
                         .append( $("<span></span>").text(" seconds.") );
