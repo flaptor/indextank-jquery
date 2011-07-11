@@ -101,6 +101,9 @@
                             // I'll save the current query inside 'data',
                             // so our listeners can use it.
                             data.query = query;
+                            // Add a pointer to us, so our listeners can call us back
+                            data.searcher = base.$el;
+                            // notify our listeners
                             base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
                             },
                 error: function( jqXHR, textStatus, errorThrown) {

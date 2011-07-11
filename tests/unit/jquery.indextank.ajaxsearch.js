@@ -130,3 +130,31 @@ test( "honors initial parameters on default query", function(){
     equals(defaultQuery.snippetFields, "7,8,9");
 
 });
+
+
+
+test( "passes self as data.searcher for listeners to call back", function() {
+  expect(2);
+
+  var queryOnScope = this.simpleQuery;
+
+  // verifies that query and results are there
+  var l = $(new Object()).bind("Indextank.AjaxSearch.success", 
+                              function(event, resultSet){ 
+                                notEqual(null, resultSet.searcher);
+                                ok( resultSet.searcher.data("Indextank.AjaxSearch"));
+                              });
+
+  // mock the queries
+  $.mockjax({
+    url: this.apiurl + "/*",
+    // this is what Indextank's API would return
+    responseText: {results: [], search_time: 1.2, facets: {}},
+    
+  });
+
+  $("#query").indextank_AjaxSearch({listeners: l});
+  $("#query").trigger("Indextank.AjaxSearch.runQuery", this.simpleQuery);
+    
+});
+
