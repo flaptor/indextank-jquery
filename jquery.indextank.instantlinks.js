@@ -74,8 +74,8 @@
                 bolds = $.map(text.match(rx) || [], function(i) { return "<span class='highlighted'>"+i+"</span>";});
                 regulars = $( $.map(text.split(rx), function(i){ return $("<span></span>").addClass("regular").text(i).get(0);}));
 
-                return regulars.append(function(i, h) {
-                    return bolds[i] || ""; 
+                return $.each(regulars, function(i, v) {
+                    $(v).append(bolds[i] || "");
                 });
             };
 
