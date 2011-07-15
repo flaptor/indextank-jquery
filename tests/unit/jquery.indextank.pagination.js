@@ -73,3 +73,20 @@ test( "goes backwards", function() {
   r.trigger("Indextank.AjaxSearch.success", {matches: 185, query: q } );
 });
 
+test( "right number of pages", function() {
+
+  expect(2);
+  var q = new Query("ignore").withStart(0).withLength(10);
+  var fmt = function(page, selected) {
+    ok(true);
+    return $("<li/>");
+  }; 
+  
+  r = $("<div/>").indextank_Pagination({formatPage: fmt});
+  r.trigger("Indextank.AjaxSearch.success", {matches: 20, query: q } );
+
+  
+});
+
+
+

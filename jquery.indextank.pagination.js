@@ -24,9 +24,9 @@
                 base.$el.html("");
 
                 // let's find out the current page
-                var currentPage = ( data.query.start / data.query.rsLength ) + 1;
+                var currentPage = Math.ceil( data.query.start / data.query.rsLength ) + 1;
                 // and how many are there 
-                var totalPages  = ( data.matches / data.query.rsLength ) + 1;
+                var totalPages  = Math.ceil( data.matches / data.query.rsLength );
 
                 // nothing to see here .. go on!
                 if (totalPages == 1 ) return; 
@@ -74,6 +74,9 @@
                     }
 
                 }
+
+                // fix for zero-size, floating non-clickable list items
+                ul.append( $("<div/>").css({ clear: "both" }) );
 
                 // make pages clickable
                 $("li", ul).click(function(e){
