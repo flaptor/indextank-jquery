@@ -89,4 +89,21 @@ test( "right number of pages", function() {
 });
 
 
+test( "never render pagination for 0 or 1 pages", function() {
+  expect(0);
+  
+  var q = new Query("ignore").withStart(0).withLength(10);
+  var fmt = function(page, selected) {
+    fail();
+    return $("<li/>");
+  } 
 
+  r = $("<div/>").indextank_Pagination({formatPage: fmt});
+  
+  // 0
+  r.trigger("Indextank.AjaxSearch.success", {matches: 0, query: q } );
+
+  // 1
+  r.trigger("Indextank.AjaxSearch.success", {matches: 10, query: q } );
+  
+});

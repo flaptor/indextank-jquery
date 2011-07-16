@@ -29,7 +29,7 @@
                 var totalPages  = Math.ceil( data.matches / data.query.rsLength );
 
                 // nothing to see here .. go on!
-                if (totalPages == 1 ) return; 
+                if (totalPages < 2 ) return; 
 
                 var ul = $("<ul/>").addClass("pagination");
 
