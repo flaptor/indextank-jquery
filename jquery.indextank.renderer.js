@@ -30,6 +30,7 @@
                     r.appendTo(base.$el);
                 });
                 base.$el.css({opacity: 1});
+                base.options.afterRender(base.$el);
             });
 
             base.$el.bind("Indextank.AjaxSearch.noResults", function(e, query) {
@@ -59,7 +60,11 @@
                             .append( $("<span></span>").addClass("description").html(item.snippet_text || item.text) );
                     },
         setupContainer: function($el){
-           $el.html("");
+            $el.html("");
+        },
+        afterRender: function($el) {
+            // do nothing. You may want to re arrange items,
+            // append some sort of legend, zebra items, you name it.      
         }
     };
     
