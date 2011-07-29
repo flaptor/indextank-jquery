@@ -168,9 +168,6 @@ test( "calls several listeners with results", function() {
 });
 
 
-
-
-
 test( "honors initial parameters on default query", function(){
     expect(5);
 
@@ -221,7 +218,7 @@ test( "passes self as data.searcher for listeners to call back", function() {
 });
 
 
-test( "notifies several listeners about Indextank.AjaxSearch.noResults", function() {
+test( "notifies listener about Indextank.AjaxSearch.noResults", function() {
   expect(1);
 
   var r = $(new Object()).bind("Indextank.AjaxSearch.noResults", function(el) {ok(true);});
