@@ -31,6 +31,9 @@
             
             base.options = $.extend({},$.Indextank.AjaxSearch.defaultOptions, options);
             base.xhr = undefined;
+
+			var listeners 	= base.options.listeners;
+			base.$listeners = (listeners instanceof Array) ? $(listeners) : $([listeners]);
             
             
             // TODO: make sure ize is an Indextank.Ize element somehow
@@ -62,7 +65,9 @@
         // };
 
         base.displayNoResults = function() {
-            base.options.listeners.trigger("Indextank.AjaxSearch.noResults", base.el.value);
+    			base.$listeners.each(function(i,l){
+    				l.trigger("Indextank.AjaxSearch.noResults", base.el.value);
+    			})
         }
 
         // gets a copy of the default query.
@@ -86,7 +91,9 @@
             // remember the current running query
             base.query = query;
 
-            base.options.listeners.trigger("Indextank.AjaxSearch.searching");
+      			base.$listeners.each(function(i,l) {
+      				l.trigger("Indextank.AjaxSearch.searching");
+      			})
             base.$el.trigger("Indextank.AjaxSearch.searching");
 
 
@@ -104,10 +111,14 @@
                             // Add a pointer to us, so our listeners can call us back
                             data.searcher = base.$el;
                             // notify our listeners
-                            base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
+								base.$listeners.each(function(i,l){
+									l.trigger("Indextank.AjaxSearch.success", data);
+								});
                             },
                 error: function( jqXHR, textStatus, errorThrown) {
-                            base.options.listeners.trigger("Indextank.AjaxSearch.failure");
+							base.$listeners.each(function(i,l){
+								l.trigger("Indextank.AjaxSearch.failure");
+							});
                 }
             } );
         } 
@@ -122,6 +133,7 @@
         // unbind everything
         base.destroy = function() {
             base.$el.unbind("Indextank.AjaxSearch.runQuery", base.runQuery);
+            base.$el.unbind("Indextank.AjaxSearch.displayNoResults", base.displayNoResults );            
             base.ize.$el.unbind("submit", base.hijackFormSubmit);
             base.$el.removeData("Indextank.AjaxSearch");
         };
