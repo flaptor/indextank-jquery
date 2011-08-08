@@ -32,9 +32,16 @@
             base.options = $.extend({},$.Indextank.AjaxSearch.defaultOptions, options);
             base.xhr = undefined;
 
-			var listeners 	= base.options.listeners;
-			base.$listeners = (listeners instanceof Array) ? $(listeners) : $([listeners]);
-            
+            // base.options.listeners is ASSUMED to be a jQuery set .. 
+            // if we got an Array, we need to convert it
+            if (base.options.listeners instanceof Array) {
+                var listeners = $();
+                $.map(base.options.listeners, function(e, i) {
+                    listeners = listeners.add(e);
+                });
+
+                base.options.listeners = listeners;
+            }
             
             // TODO: make sure ize is an Indextank.Ize element somehow
             base.ize = $(base.el.form).data("Indextank.Ize");
@@ -65,9 +72,7 @@
         // };
 
         base.displayNoResults = function() {
-    			base.$listeners.each(function(i,l){
-    				l.trigger("Indextank.AjaxSearch.noResults", base.el.value);
-    			})
+            base.options.listeners.trigger("Indextank.AjaxSearch.noResults", base.el.value);
         }
 
         // gets a copy of the default query.
@@ -91,9 +96,7 @@
             // remember the current running query
             base.query = query;
 
-      			base.$listeners.each(function(i,l) {
-      				l.trigger("Indextank.AjaxSearch.searching");
-      			})
+            base.options.listeners.trigger("Indextank.AjaxSearch.searching");
             base.$el.trigger("Indextank.AjaxSearch.searching");
 
 
@@ -111,14 +114,10 @@
                             // Add a pointer to us, so our listeners can call us back
                             data.searcher = base.$el;
                             // notify our listeners
-								base.$listeners.each(function(i,l){
-									l.trigger("Indextank.AjaxSearch.success", data);
-								});
+                            base.options.listeners.trigger("Indextank.AjaxSearch.success", data);
                             },
                 error: function( jqXHR, textStatus, errorThrown) {
-							base.$listeners.each(function(i,l){
-								l.trigger("Indextank.AjaxSearch.failure");
-							});
+                            base.options.listeners.trigger("Indextank.AjaxSearch.failure");
                 }
             } );
         } 
