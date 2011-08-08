@@ -31,7 +31,17 @@
             
             base.options = $.extend({},$.Indextank.AjaxSearch.defaultOptions, options);
             base.xhr = undefined;
-            
+
+            // base.options.listeners is ASSUMED to be a jQuery set .. 
+            // if we got an Array, we need to convert it
+            if (base.options.listeners instanceof Array) {
+                var listeners = $();
+                $.map(base.options.listeners, function(e, i) {
+                    listeners = listeners.add(e);
+                });
+
+                base.options.listeners = listeners;
+            }
             
             // TODO: make sure ize is an Indextank.Ize element somehow
             base.ize = $(base.el.form).data("Indextank.Ize");
@@ -122,6 +132,7 @@
         // unbind everything
         base.destroy = function() {
             base.$el.unbind("Indextank.AjaxSearch.runQuery", base.runQuery);
+            base.$el.unbind("Indextank.AjaxSearch.displayNoResults", base.displayNoResults );            
             base.ize.$el.unbind("submit", base.hijackFormSubmit);
             base.$el.removeData("Indextank.AjaxSearch");
         };
