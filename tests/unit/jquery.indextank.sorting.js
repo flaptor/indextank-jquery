@@ -21,7 +21,7 @@ test( "reacts to queries", function() {
         r.trigger("Indextank.AjaxSearch.success", {query: q, searcher: s});
 
         // simulate a click
-        r.children().first().click();
+        r.find("span").first().click();
 
     });
 });
@@ -30,9 +30,11 @@ test( "changes scoring function value", function(){
     expect(1);
 
     var r = $("<div/>").indextank_Sorting({labels: {"relevance": 0, "age": 1 }});
+    // make 3 the default number .. so 0 looks like a change
     var q = new Query("bleh").withScoringFunction(3);
 
     var s = $(new Object()).bind("Indextank.AjaxSearch.runQuery", function(event, query){
+        // test it changed
         equals(0, query.scoringFunction);
     });
         
@@ -41,5 +43,5 @@ test( "changes scoring function value", function(){
         
         
     // simulate a click
-    r.children().first().click();
+    r.find("span").first().click();
 });

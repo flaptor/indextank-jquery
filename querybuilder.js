@@ -120,7 +120,7 @@ Query.prototype.clone = function() {
     if (this.scoringFunction != null) q.scoringFunction = this.scoringFunction;
     if (this.snippetFields != null) q.snippetFields = this.snippetFields;
     if (this.fetchFields != null) q.fetchFields = this.fetchFields;
-    if (this.category_filters != null) q.category_filters = this.category_filters;
+    if (this.categoryFilters != null) q.categoryFilters = this.categoryFilters;
     if (this.documentVariableFilters != null) q.documentVariableFilters = this.documentVariableFilters;
     if (this.functionFilters != null) q.functionFilters = this.functionFilters;
     if (this.queryVariables != null) q.queryVariables = this.queryVariables;

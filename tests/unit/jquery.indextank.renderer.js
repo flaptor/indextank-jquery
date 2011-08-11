@@ -12,11 +12,33 @@ module("Module Renderer", {
             // return a dummy object
             return $("<span/>");
         };
+        this.okSetupContainer = function() {
+            ok(true, "okSetupContainer");
+        };
+
+        this.okAfterRender = function() {
+            ok(true, "okAfterRender");
+        }; 
     },
     teardown: function() {
     }
 });
 
+test( "check that setupContainer function gets called once for each search", function() {
+  expect(3);
+  r = $("<div/>").indextank_Renderer({setupContainer:this.okSetupContainer, format:this.dummyFmt});
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
+});
+
+test( "check that afterRender function gets called once for each search", function() {
+  expect(3);
+  r = $("<div/>").indextank_Renderer({afterRender:this.okAfterRender, format:this.dummyFmt});
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
+  r.trigger("Indextank.AjaxSearch.success", this.resultSet);
+});
 
 
 test( "check it calls format function for each result", function() {

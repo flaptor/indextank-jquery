@@ -24,12 +24,13 @@
             });
 
             base.$el.bind("Indextank.AjaxSearch.success", function(e, data) {
-                base.$el.html("");
+                base.options.setupContainer(base.$el);
                 $(data.results).each( function (i, item) {
                     var r = base.options.format(item);
                     r.appendTo(base.$el);
                 });
                 base.$el.css({opacity: 1});
+                base.options.afterRender(base.$el);
             });
 
             base.$el.bind("Indextank.AjaxSearch.noResults", function(e, query) {
@@ -57,7 +58,14 @@
                             .addClass("result")
                             .append( $("<a></a>").attr("href", item.link || item.url ).text(item.title || item.name) )
                             .append( $("<span></span>").addClass("description").html(item.snippet_text || item.text) );
-                    }
+                    },
+        setupContainer: function($el){
+            $el.html("");
+        },
+        afterRender: function($el) {
+            // do nothing. You may want to re arrange items,
+            // append some sort of legend, zebra items, you name it.      
+        }
     };
     
     $.fn.indextank_Renderer = function(options){

@@ -18,43 +18,59 @@
         base.init = function(){
             base.options = $.extend({},$.Indextank.Sorting.defaultOptions, options);
 
-            base.$el.bind("Indextank.AjaxSearch.success", function(event, data){
-                // keep a copy of the query, so we can re-run it.
-                base.query = data.query;
-                // keep a pointer to the event trigger .. HACKY way
-                base.searcher = data.searcher;
-            });
+            // react to result sets ..  
+            base.$el.bind( "Indextank.AjaxSearch.success", base.trackQuery);
 
-    
-            // render it
-            base.$el.append("sort by:");
-            $.each(base.options.labels, function(label, fn) {
-                var btn = $("<span/>").text(label);
-                btn.click(function(event){
-                    base.$el.children().removeClass("active");
-                    btn.addClass("active");
-
+            // create the control
+            var control = $("<div/>").append("Sort by ");
+            $.each( base.options.labels, function (name, fn){
+                var btn = $("<span/>").text(name);
+                btn.click( function(event){
+                    control.children().removeClass("selected");
+                    $(this).addClass("selected");
                     if (base.query) {
-                        query = base.query.withScoringFunction(fn);
+                        query = base.query.clone().withScoringFunction(fn);
+                        // remember to start from scratch
+                        query.withStart(0);
                         base.searcher.trigger("Indextank.AjaxSearch.runQuery", [query]);
-                    };
+                    }
                 });
 
-                base.$el.append(btn);
+                control.append(btn);
             });
+
+            // add separator
+            control.children(":not(:first)").prepend(" ", base.options.separator, " ");
+            
+            // and make it appear
+            base.$el.append(control);
         };
-        
-        // Sample Function, Uncomment to use
-        // base.functionName = function(paramaters){
-        // 
-        // };
+       
+        // tracks the latest query, so sorting buttons can run it again, changing the scoring function
+        base.trackQuery = function(event, data) {
+            // keep a copy of the query, so we can re-run it.
+            base.query = data.query;
+            // keep a pointer to the event trigger .. HACKY way
+            base.searcher = data.searcher;
+        };
+         
+
+        // clean up
+        base.destroy = function(){
+            base.$el.unbind( "Indextank.AjaxSearch.success", base.trackQuery);
+            base.$el.removeData("Indextank.Sorting");
+        };
         
         // Run initializer
         base.init();
     };
     
     $.Indextank.Sorting.defaultOptions = {
-        labels: { 'fresh' : 0 }
+        // you should REALLY provide it, as the default is useless
+        labels: { 'newest' : 0 }, 
+
+        // the separator for possible sorting names. just for formatting
+        separator : "|"
     };
     
     $.fn.indextank_Sorting = function(options){
