@@ -82,6 +82,18 @@ Query.prototype.withCategoryFilters = function (categoryFilters) {
     return this;
 };
 
+Query.prototype.withoutCategories = function (categories) {
+    if (this.categoryFilters == null) {
+        this.categoryFilters = {};
+    } else {
+        for (idx in categories) {
+            delete this.categoryFilters[categories[idx]];
+        }
+    }
+
+    return this;
+};
+
 Query.prototype.withQueryVariables = function (queryVariables) {
     if (this.queryVariables == null) {
         this.queryVariables = {};
