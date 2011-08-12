@@ -55,6 +55,7 @@
                     .click(function(){
                         // ensure query data has something on it
                         var query = data.query.clone();
+                        // remove the selected category from the query
                         query.withoutCategories([categoryName]);
                         // start over!
                         query.withStart(0);
