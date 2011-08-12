@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <!-- Dependencies -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="querybuilder.js"></script>
+        <script type="text/javascript" src="jquery.indextank.ize.js"></script>
+        <script type="text/javascript" src="jquery.indextank.ajaxsearch.js"></script>
+        <script type="text/javascript" src="jquery.indextank.facetsrenderer.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/south-street/jquery-ui.css" media="all" />
+
+        <script>
+            $(document).ready(function(){
+                $("#myform").indextank_Ize(YOUR_PUBLIC_API_URL, YOUR_INDEX_NAME);
+                $("#facets").indextank_FacetsRenderer();
+                $("#query").indextank_AjaxSearch( {listeners: $("#facets")});
+            });
+        </script>
+    </head>
+
+    <body>
+        <h3>Type, hit enter and see facets rendered by jquery.indextank.facetsrenderer.js</h3>
+        <form id="myform" action="ignored.html">
+            <input id="query" type="text"/>
+        </form>
+        <div id="facets"></div>
+    </body>
+</html>
