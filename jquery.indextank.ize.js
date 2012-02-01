@@ -13,8 +13,8 @@
         base.el = el;
        
         // some parameter validation
-        var urlrx = /http(s)?:\/\/[a-z0-9]+.api.indextank.com/; 
-        if (!urlrx.test(apiurl)) throw("invalid api url!");
+        var urlrx = /http(s)?:\/\/[a-z0-9]+\.api\..+/; 
+        if (!urlrx.test(apiurl)) throw("invalid api url ! is it private ? ");
         if (indexName == undefined) throw("index name is not defined!");
 
         // Add a reverse reference to the DOM object
